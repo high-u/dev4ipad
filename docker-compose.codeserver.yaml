@@ -7,7 +7,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Tokyo
-      - PASSWORD=ilovesora #optional
+      - PASSWORD=${PW} #optional
       #- HASHED_PASSWORD= #optional
       #- SUDO_PASSWORD=password #optional
       #- SUDO_PASSWORD_HASH= #optional
