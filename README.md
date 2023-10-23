@@ -6,8 +6,8 @@
 
 - Own the domain.
 - Starting a linux server.
-- Node.js is installed.
-- Docker Compose is installed.
+- Node.js is installed on the linux server.
+- Docker Compose is installed on the linux server.
 
 ### Reverse Proxy
 
