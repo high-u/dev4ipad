@@ -2,6 +2,13 @@
 
 ## Usage
 
+### Prerequisite
+
+- Own the domain.
+- Starting a linux server.
+- Node.js is installed.
+- Docker Compose is installed.
+
 ### Reverse Proxy
 
 ```bash
