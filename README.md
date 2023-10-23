@@ -5,6 +5,8 @@
 ### Reverse Proxy
 
 ```bash
+vim caddy/config/Caddyfile
+
 docker compose -f docker-compose.reverseproxy.yaml up -d
 ```
 
