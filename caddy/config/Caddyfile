@@ -1,6 +1,5 @@
 {
   email zen.crazyd@gmail.com
-  auto_https disable_redirects
 }
 dev.apps.the5203.com {
   reverse_proxy code-server:8443
