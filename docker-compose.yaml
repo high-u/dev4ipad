@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  code-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - HASHED_PASSWORD=$CODE_SERVER_HASHED_PASSWORD
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Tokyo
+      - DEFAULT_WORKSPACE=/root/projects
+    volumes:
+      - $HOME/.config/code-server:/root/.config/code-server
+      - $HOME/.local/share/code-server:/root/.local/share/code-server
+      - $HOME/projects:/root/projects
+    networks:
+      - reverseproxy
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    networks:
+      - reverseproxy
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - $PWD/caddy/config/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/caddy/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - code-server
+
+networks:
+  reverseproxy:
+    external: true
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
