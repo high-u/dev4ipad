@@ -9,25 +9,32 @@
 - Node.js is installed on the linux server.
 - Docker Compose is installed on the linux server.
 
-### Reverse Proxy
+### DNS Records
+
+ex. CLOUDFLARE
+
+|Type|Name|Content|Proxy status|TTL|
+|:--|:--|:--|:--|:--|
+|A|*.apps|123.123.123.123|DNS only|Auto|
+
+### Docker resources
 
 ```bash
-vim caddy/config/Caddyfile
-
-docker compose -f docker-compose.reverseproxy.yaml up -d
+docker network create reverseproxy
+docker volume create caddy_data
 ```
 
-### Code Server
+### Execute
 
 ```bash
-npm i -g argon2-cli
-ARGON2=$(echo -n "password" | npx argon2-cli -e)
-echo $ARGON2
-# ex.
-# $argon2i$v=19$m=4096,t=3,p=1$ZFw3rh7n8UT6ZokcCCWkvw$FOreo3r8BXKtgROresDrfIWA3iUO+3RLmbyUqqlDSU8
-HPW=${ARGON2//'$'/'$$'}
-sed -i -e "s/HASHED_PASSWORD=.*$/HASHED_PASSWORD=${HPW}/g" docker-compose.codeserver.yaml
+CODE_SERVER_HASHED_PASSWORD=$(echo -n 'password' | sha256sum | cut -d' ' -f1)
+# https://github.com/coder/code-server/blob/v3.8.0/doc/FAQ.md#can-i-store-my-password-hashed
+# https://github.com/coder/code-server/issues/2225
+#
+# Hashed password generation on macOS
+# `docker run ubuntu bash -c "echo -n 'password' | sha256sum | cut -d' ' -f1"`
 
-docker compose -f docker-compose.codeserver.yaml up -d
+echo "CODE_SERVER_HASHED_PASSWORD=${CODE_SERVER_HASHED_PASSWORD}" > .env
+
+docker compose up -d
 ```
-
